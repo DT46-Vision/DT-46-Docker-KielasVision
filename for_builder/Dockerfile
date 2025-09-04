@@ -1,5 +1,5 @@
 # 基础镜像：ROS2 Humble Desktop
-FROM osrf/ros:humble-desktop
+FROM arm64v8/ros:humble
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=en_US.UTF-8
@@ -45,10 +45,10 @@ RUN pip install --no-cache-dir \
     empy==3.3.4 \
     lark-parser
 
-# （可选）安装 MindVision/Hik SDK
+# （可选）安装 MindVision(arm64 or x86)/Hik SDK
 COPY ./MindVisionSDK /tmp/MindVisionSDK
 RUN if [ -d /tmp/MindVisionSDK ]; then \
-      cd /tmp/MindVisionSDK && bash install.sh && cp lib/x64/libMVSDK.so /usr/lib/ && echo "/usr/lib" > /etc/ld.so.conf.d/mvskd.conf && ldconfig && rm -rf /tmp/MindVisionSDK; \
+      cd /tmp/MindVisionSDK && bash install.sh && cp lib/arm64/libMVSDK.so /usr/lib/ && echo "/usr/lib" > /etc/ld.so.conf.d/mvskd.conf && ldconfig && rm -rf /tmp/MindVisionSDK; \
     else echo "No MindVisionSDK provided, skipping"; fi
 
 COPY ./MVS.deb /tmp/MVS.deb

@@ -1,10 +1,10 @@
-version: "3.9"
-
 services:
   rmvision-core:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - BUILDPLATFORM=linux/arm64
     image: kielas_rmvision:latest
     container_name: rmvision-core
     network_mode: host
@@ -14,11 +14,12 @@ services:
     environment:
       - DISPLAY=${DISPLAY}
       - QT_X11_NO_MITSHM=1
+      - XAUTHORITY=/root/.Xauthority
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - ./ros_ws:/ros_ws
+      - ~/.Xauthority:/root/.Xauthority:rw
     working_dir: /ros_ws
     command: >
       bash -c "source /opt/ros/humble/setup.bash &&
-               source install/setup.bash || true &&
-               ros2 launch rm_vision_bringup usb_nav.launch.py"
+               source /ros_ws/install/setup.bash &&
+               ros2 launch rm_vision_bringup mv_nav.launch.py"

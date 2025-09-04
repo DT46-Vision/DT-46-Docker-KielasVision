@@ -16,7 +16,7 @@ help: ## 显示可用命令
 	@echo "  make clean     - 停止并删除容器+镜像+卷"
 
 build: ## 编译镜像
-	docker compose build
+	docker compose build --no-cache
 
 up: ## 启动核心容器 (运行 ros2 launch)
 	docker compose up
